@@ -28,13 +28,13 @@ import (
 	"os"
 	"time"
 
-	// "charm.land/lipgloss/v2"
+	"charm.land/lipgloss/v2"
 	"github.com/spf13/cobra"
 )
 
 type Happiness struct {
   Date string `json:"date"` // jsonのキーのaliasみたいな
-  Content []Content `json:"content"`
+  Contents []Content `json:"content"`
 }
 
 type Content struct {
@@ -57,6 +57,7 @@ to quickly create a Cobra application.`,
 	// Run: func(cmd *cobra.Command, args []string) { },
   Run: func(cmd *cobra.Command, args []string) {
 
+    // NOTE: 初回実行時はdata.jsonなんかない、どうする
     fileByte, err := os.ReadFile("data.json")
 
     if err != nil {
@@ -79,24 +80,32 @@ to quickly create a Cobra application.`,
     var contents []Content
 
     if len(args) == 0 {
+			ShowGraph(records, today)
       return
     }
 
-    // TODO:同じ日付があればmerge
     for _, arg := range args {
       content := Content {
         Detail: arg,
       }
-
       contents = append(contents, content)
+    }
+
+    for index, record := range records {
+      if today == record.Date {
+        contents = append(record.Contents, contents...)
+        // 同じ日付の既存要素を削除
+        records = records[:index]
+      }
     }
 
     var happiness = Happiness {
       Date: today,
-      Content: contents,
+      Contents: contents,
     }
 
     records = append(records, happiness)
+    fmt.Println(records)
     buf, err := json.Marshal(records)
 
     if err != nil {
@@ -104,12 +113,29 @@ to quickly create a Cobra application.`,
     }
 
     os.WriteFile("data.json", buf, 0640)
-    ShowTip()
+    ShowGraph(records, today)
 	},
 }
 
-func ShowTip() {
-  fmt.Println("hello")
+func ShowGraph(records []Happiness, today string) {
+  Analysis(records)
+  grassChar := "■ "
+  level0 := lipgloss.NewStyle().Foreground(lipgloss.Black)
+  level1 := lipgloss.NewStyle().Foreground(lipgloss.Color("#9be9a8"))
+  level2 := lipgloss.NewStyle().Foreground(lipgloss.Color("#40c463"))
+  level3 := lipgloss.NewStyle().Foreground(lipgloss.Color("#30a14e"))
+  level4 := lipgloss.NewStyle().Foreground(lipgloss.Color("#216e39"))
+
+  fmt.Println(level0.Render(grassChar))
+  fmt.Println(level1.Render(grassChar))
+  fmt.Println(level2.Render(grassChar))
+  fmt.Println(level3.Render(grassChar))
+  fmt.Println(level4.Render(grassChar))
+}
+
+// その日のcontentがいくつあるのか
+func Analysis(records []Happiness) {
+
 
 }
 
