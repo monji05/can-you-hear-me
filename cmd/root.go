@@ -58,17 +58,13 @@ to quickly create a Cobra application.`,
 	// Run: func(cmd *cobra.Command, args []string) { },
   Run: func(cmd *cobra.Command, args []string) {
 
+		var records []Happiness
     // NOTE: 初回実行時はdata.jsonなんかない、どうする
     fileByte, err := os.ReadFile("data.json")
 
-		var records []Happiness
-
-    if err != nil {
+    if err != nil  && !errors.Is(err, os.ErrNotExist) {
 			// ファイルが存在しない場合は初回実行とみなし、空のスライスのまま進める
-			if errors.Is(err, os.ErrNotExist) {
-			} else {
-				log.Fatal(err)
-			}
+			log.Fatal(err)
     } else {
 			err = json.Unmarshal(fileByte, &records)
 
