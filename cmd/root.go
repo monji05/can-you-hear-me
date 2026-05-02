@@ -108,7 +108,7 @@ to quickly create a Cobra application.`,
 			})
 		}
 
-    buf, err := json.Marshal(records)
+    buf, err := json.MarshalIndent(records, "", "  ")
 
     if err != nil {
       log.Fatal(err)
