@@ -94,7 +94,6 @@ to quickly create a Cobra application.`,
     for index, record := range records {
       if today == record.Date {
 				isTodayFlg = true
-        // contents = append(record.Contents, contents...)
         // 同じ日付の既存要素を削除
         records[index].Contents = append(records[index].Contents, newContents...)
 				break
