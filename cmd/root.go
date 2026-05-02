@@ -105,7 +105,6 @@ to quickly create a Cobra application.`,
     }
 
     records = append(records, happiness)
-    fmt.Println(records)
     buf, err := json.Marshal(records)
 
     if err != nil {
