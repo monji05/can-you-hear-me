@@ -73,10 +73,7 @@ to quickly create a Cobra application.`,
 			}
 		}
 
-    // NOTE: 2006-01-02じゃないとだめ
-    // NOTE: これは2006年の1月2日としているわけではなく、 1月2日 3時4分5秒 2006年=123456と並べられるもの
-    // NOTE: 独特すぎる。。
-    today := time.Now().Format("2006-01-02")
+    today := time.Now().Format(time.DateOnly)
 
     if len(args) == 0 {
 			showGraph(records, today)
