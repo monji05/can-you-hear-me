@@ -79,7 +79,7 @@ to quickly create a Cobra application.`,
     today := time.Now().Format("2006-01-02")
 
     if len(args) == 0 {
-			ShowGraph(records, today)
+			showGraph(records, today)
       return
     }
 
@@ -114,12 +114,12 @@ to quickly create a Cobra application.`,
     }
 
     os.WriteFile("data.json", buf, 0640)
-    ShowGraph(records, today)
+    showGraph(records, today)
 	},
 }
 
-func ShowGraph(records []Happiness, today string) {
-  Analysis(records)
+func showGraph(records []Happiness, today string) {
+  analysis(records)
   grassChar := "■ "
   level0 := lipgloss.NewStyle().Foreground(lipgloss.Black)
   level1 := lipgloss.NewStyle().Foreground(lipgloss.Color("#9be9a8"))
@@ -135,7 +135,7 @@ func ShowGraph(records []Happiness, today string) {
 }
 
 // その日のcontentがいくつあるのか
-func Analysis(records []Happiness) {
+func analysis(records []Happiness) {
 
 
 }
