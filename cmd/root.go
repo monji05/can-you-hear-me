@@ -23,6 +23,7 @@ package cmd
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -60,51 +61,57 @@ to quickly create a Cobra application.`,
     // NOTE: 初回実行時はdata.jsonなんかない、どうする
     fileByte, err := os.ReadFile("data.json")
 
-    if err != nil {
-      log.Fatal(err)
-    }
-
-    var records []Happiness
-
-    err = json.Unmarshal(fileByte, &records)
+		var records []Happiness
 
     if err != nil {
-      log.Fatal(err)
-    }
+			// ファイルが存在しない場合は初回実行とみなし、空のスライスのまま進める
+			if errors.Is(err, os.ErrNotExist) {
+			} else {
+				log.Fatal(err)
+			}
+    } else {
+			err = json.Unmarshal(fileByte, &records)
+
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
 
     // NOTE: 2006-01-02じゃないとだめ
     // NOTE: これは2006年の1月2日としているわけではなく、 1月2日 3時4分5秒 2006年=123456と並べられるもの
     // NOTE: 独特すぎる。。
     today := time.Now().Format("2006-01-02")
 
-    var contents []Content
-
     if len(args) == 0 {
 			ShowGraph(records, today)
       return
     }
 
+		var newContents []Content
     for _, arg := range args {
-      content := Content {
-        Detail: arg,
-      }
-      contents = append(contents, content)
+      newContents = append(newContents, Content {
+				Detail: arg,
+			})
     }
 
+		isTodayFlg := false
     for index, record := range records {
       if today == record.Date {
-        contents = append(record.Contents, contents...)
+				isTodayFlg = true
+        // contents = append(record.Contents, contents...)
         // 同じ日付の既存要素を削除
-        records = records[:index]
+        records[index].Contents = append(records[index].Contents, newContents...)
+				break
       }
     }
 
-    var happiness = Happiness {
-      Date: today,
-      Contents: contents,
-    }
+		if !isTodayFlg {
+			records = append(records, Happiness {
+				Date: today,
+				Contents: newContents,
+			})
+		}
 
-    records = append(records, happiness)
     buf, err := json.Marshal(records)
 
     if err != nil {
