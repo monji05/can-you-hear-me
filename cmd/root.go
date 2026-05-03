@@ -93,7 +93,6 @@ to quickly create a Cobra application.`,
       if today == record.Date {
 				isTodayFlg = true
         records[index].Contents = append(records[index].Contents, newContents...)
-        fmt.Println(records[index].Contents)
         records[index].Count = len(records[index].Contents)
 				break
       }
