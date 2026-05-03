@@ -126,11 +126,20 @@ func showGraph(records []Happiness, today string) {
   level3 := lipgloss.NewStyle().Foreground(lipgloss.Color("#30a14e"))
   level4 := lipgloss.NewStyle().Foreground(lipgloss.Color("#216e39"))
 
-  fmt.Println(level0.Render(grassChar))
-  fmt.Println(level1.Render(grassChar))
-  fmt.Println(level2.Render(grassChar))
-  fmt.Println(level3.Render(grassChar))
-  fmt.Println(level4.Render(grassChar))
+  for _, record := range records {
+    switch record.Count {
+    case 0:
+      fmt.Println(level0.Render(grassChar))
+    case 1:
+      fmt.Println(level1.Render(grassChar))
+    case 2:
+      fmt.Println(level2.Render(grassChar))
+    case 3:
+      fmt.Println(level3.Render(grassChar))
+    default:
+      fmt.Println(level4.Render(grassChar))
+    }
+  }
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
