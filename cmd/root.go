@@ -60,19 +60,7 @@ to quickly create a Cobra application.`,
   Run: func(cmd *cobra.Command, args []string) {
 
 		var records []Happiness
-    // NOTE: 初回実行時はdata.jsonなんかない、どうする
-    fileByte, err := os.ReadFile("data.json")
-
-    if err != nil  && !errors.Is(err, os.ErrNotExist) {
-			// ファイルが存在しない場合は初回実行とみなし、空のスライスのまま進める
-			log.Fatal(err)
-    } else {
-			err = json.Unmarshal(fileByte, &records)
-
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
+    records, err := readFile(records)
 
     today := time.Now().Format(time.DateOnly)
 
@@ -115,6 +103,25 @@ to quickly create a Cobra application.`,
     os.WriteFile("data.json", buf, 0640)
     showGraph(records, today)
 	},
+}
+
+func readFile(records []Happiness) ([]Happiness, error) {
+  fileByte, err := os.ReadFile("data.json")
+
+  if err != nil  && !errors.Is(err, os.ErrNotExist) {
+    // ファイルが存在しない場合は初回実行とみなし、空のスライスのまま進める
+    log.Fatal(err)
+  } else {
+    err = json.Unmarshal(fileByte, &records)
+
+    if err != nil {
+      log.Fatal(err)
+    }
+  }
+
+  // NOTE: ポインタでrecordsに読み込んでいるからrecordsを返さなくていいと思ったけど
+  // ここでrecordsを返さないと空判定される
+  return records,  err
 }
 
 func showGraph(records []Happiness, today string) {
