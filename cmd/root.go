@@ -60,7 +60,7 @@ to quickly create a Cobra application.`,
   Run: func(cmd *cobra.Command, args []string) {
 
 		var records []Happiness
-    records, err := readFile(records)
+    err := readFile(&records)
 
     today := time.Now().Format(time.DateOnly)
 
@@ -105,23 +105,21 @@ to quickly create a Cobra application.`,
 	},
 }
 
-func readFile(records []Happiness) ([]Happiness, error) {
+func readFile(records *[]Happiness) (error) {
   fileByte, err := os.ReadFile("data.json")
 
   if err != nil  && !errors.Is(err, os.ErrNotExist) {
     // ファイルが存在しない場合は初回実行とみなし、空のスライスのまま進める
     log.Fatal(err)
   } else {
-    err = json.Unmarshal(fileByte, &records)
+    err = json.Unmarshal(fileByte, records)
 
     if err != nil {
       log.Fatal(err)
     }
   }
 
-  // NOTE: ポインタでrecordsに読み込んでいるからrecordsを返さなくていいと思ったけど
-  // ここでrecordsを返さないと空判定される
-  return records,  err
+  return err
 }
 
 func showGraph(records []Happiness, today string) {
