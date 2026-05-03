@@ -60,7 +60,7 @@ to quickly create a Cobra application.`,
   Run: func(cmd *cobra.Command, args []string) {
 
 		var records []Happiness
-    err := readFile(&records)
+    readFile(&records)
 
     today := time.Now().Format(time.DateOnly)
 
@@ -105,7 +105,7 @@ to quickly create a Cobra application.`,
 	},
 }
 
-func readFile(records *[]Happiness) (error) {
+func readFile(records *[]Happiness) {
   fileByte, err := os.ReadFile("data.json")
 
   if err != nil  && !errors.Is(err, os.ErrNotExist) {
@@ -118,8 +118,6 @@ func readFile(records *[]Happiness) (error) {
       log.Fatal(err)
     }
   }
-
-  return err
 }
 
 func showGraph(records []Happiness, today string) {
