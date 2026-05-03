@@ -35,7 +35,8 @@ import (
 
 type Happiness struct {
   Date string `json:"date"` // jsonのキーのaliasみたいな
-  Contents []Content `json:"content"`
+  Contents []Content `json:"contents"`
+  Count int `json:"count"`
 }
 
 type Content struct {
@@ -92,6 +93,8 @@ to quickly create a Cobra application.`,
       if today == record.Date {
 				isTodayFlg = true
         records[index].Contents = append(records[index].Contents, newContents...)
+        fmt.Println(records[index].Contents)
+        records[index].Count = len(records[index].Contents)
 				break
       }
     }
@@ -100,6 +103,7 @@ to quickly create a Cobra application.`,
 			records = append(records, Happiness {
 				Date: today,
 				Contents: newContents,
+        Count: len(newContents),
 			})
 		}
 
@@ -115,7 +119,6 @@ to quickly create a Cobra application.`,
 }
 
 func showGraph(records []Happiness, today string) {
-  analysis(records)
   grassChar := "■ "
   level0 := lipgloss.NewStyle().Foreground(lipgloss.Black)
   level1 := lipgloss.NewStyle().Foreground(lipgloss.Color("#9be9a8"))
@@ -129,13 +132,6 @@ func showGraph(records []Happiness, today string) {
   fmt.Println(level3.Render(grassChar))
   fmt.Println(level4.Render(grassChar))
 }
-
-// その日のcontentがいくつあるのか
-func analysis(records []Happiness) {
-
-
-}
-
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
