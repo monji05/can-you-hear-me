@@ -122,8 +122,9 @@ func readFile(records *[]Happiness) {
 
 func showGraph(records []Happiness, today string) {
   grassChar := "■ "
-  // FIX: level0の色変える
-  level0 := lipgloss.NewStyle().Foreground(lipgloss.Blue)
+  darkGray := lipgloss.Color("#3C3C3C")
+  darkenGray := lipgloss.Darken(darkGray, 0.25)
+  level0 := lipgloss.NewStyle().Foreground(darkenGray)
   level1 := lipgloss.NewStyle().Foreground(lipgloss.Color("#9be9a8"))
   level2 := lipgloss.NewStyle().Foreground(lipgloss.Color("#40c463"))
   level3 := lipgloss.NewStyle().Foreground(lipgloss.Color("#30a14e"))
