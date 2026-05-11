@@ -126,9 +126,9 @@ func showGraph(records []Happiness, today string) {
   darkenGray := lipgloss.Darken(darkGray, 0.25)
   level0 := lipgloss.NewStyle().Foreground(darkenGray)
   level1 := lipgloss.NewStyle().Foreground(lipgloss.Color("#9be9a8"))
-  level2 := lipgloss.NewStyle().Foreground(lipgloss.Color("#40c463"))
-  level3 := lipgloss.NewStyle().Foreground(lipgloss.Color("#30a14e"))
-  level4 := lipgloss.NewStyle().Foreground(lipgloss.Color("#216e39"))
+  level2 := lipgloss.NewStyle().Foreground(lipgloss.Color("#4d8b60"))
+  level3 := lipgloss.NewStyle().Foreground(lipgloss.Color("#216e39"))
+  level4 := lipgloss.NewStyle().Foreground(lipgloss.Color("#1a582d"))
 
   now := time.Now()
   year := now.Year()
