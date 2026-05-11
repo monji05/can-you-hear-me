@@ -121,7 +121,7 @@ func readFile(records *[]Happiness) {
 }
 
 func showGraph(records []Happiness, today string) {
-  grassChar := "󰝤 "
+  grassChar := " "
   darkGray := lipgloss.Color("#3C3C3C")
   darkenGray := lipgloss.Darken(darkGray, 0.25)
   level0 := lipgloss.NewStyle().Foreground(darkenGray)
@@ -140,7 +140,11 @@ func showGraph(records []Happiness, today string) {
 
   var date string = "    "
   for day := 1; day <= 31; day++ {
-    date += fmt.Sprintf("%02d ", day )
+		if day % 5 == 0 {
+			date += fmt.Sprintf("%02d", day)
+		} else {
+			date += "  "
+		}
   }
   fmt.Println(year)
   fmt.Println(date)
@@ -166,7 +170,7 @@ func showGraph(records []Happiness, today string) {
       default:
         rendered = level4.Render(grassChar)
       }
-      grassRow += rendered + " "
+      grassRow += rendered
     }
     fmt.Println(grassRow)
   }
