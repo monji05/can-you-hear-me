@@ -150,7 +150,7 @@ func showGraph(records []Happiness, today string) {
     grassRow = fmt.Sprintf("%02d  ", m)
 
     for day := 1;  day <= daysInMonth; day++ {
-      key := fmt.Sprintf("%04d-%02d-%02d", year, time.Month(month), day)
+      key := fmt.Sprintf("%04d-%02d-%02d", year, time.Month(m), day)
       count := happinessMap[key]
       var rendered string
       switch {
