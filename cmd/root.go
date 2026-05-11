@@ -122,25 +122,52 @@ func readFile(records *[]Happiness) {
 
 func showGraph(records []Happiness, today string) {
   grassChar := "■ "
-  level0 := lipgloss.NewStyle().Foreground(lipgloss.Black)
+  level0 := lipgloss.NewStyle().Foreground(lipgloss.Blue)
   level1 := lipgloss.NewStyle().Foreground(lipgloss.Color("#9be9a8"))
   level2 := lipgloss.NewStyle().Foreground(lipgloss.Color("#40c463"))
   level3 := lipgloss.NewStyle().Foreground(lipgloss.Color("#30a14e"))
   level4 := lipgloss.NewStyle().Foreground(lipgloss.Color("#216e39"))
 
+  now := time.Now()
+  year := now.Year()
+
+  happinessMap := make(map[string]int)
   for _, record := range records {
-    switch record.Count {
-    case 0:
-      fmt.Println(level0.Render(grassChar))
-    case 1:
-      fmt.Println(level1.Render(grassChar))
-    case 2:
-      fmt.Println(level2.Render(grassChar))
-    case 3:
-      fmt.Println(level3.Render(grassChar))
-    default:
-      fmt.Println(level4.Render(grassChar))
+    happinessMap[record.Date] = record.Count
+  }
+
+  var date string = "    "
+  for day := 1; day <= 31; day++ {
+    date += fmt.Sprintf("%02d ", day )
+  }
+  fmt.Println(year)
+  fmt.Println(date)
+
+  var grassRow string
+  for m := 1; m <= 12; m ++ {
+    month := m+1 //0始まりなので
+    daysInMonth := time.Date(year, time.Month(month), 0 ,0, 0, 0, 0, time.Local).Day()
+    grassRow = fmt.Sprintf("%02d  ", m)
+
+    for day := 1;  day <= daysInMonth; day++ {
+      key := fmt.Sprintf("%04d-%02d-%02d", year, time.Month(month), day)
+      count := happinessMap[key]
+      var rendered string
+      switch {
+      case count == 0:
+        rendered = level0.Render(grassChar)
+      case count == 1:
+        rendered = level1.Render(grassChar)
+      case count == 2:
+        rendered = level2.Render(grassChar)
+      case count == 3:
+        rendered = level3.Render(grassChar)
+      default:
+        rendered = level4.Render(grassChar)
+      }
+      grassRow += rendered + " "
     }
+    fmt.Println(grassRow)
   }
 }
 
