@@ -122,6 +122,7 @@ func readFile(records *[]Happiness) {
 
 func showGraph(records []Happiness, today string) {
   grassChar := "■ "
+  // FIX: level0の色変える
   level0 := lipgloss.NewStyle().Foreground(lipgloss.Blue)
   level1 := lipgloss.NewStyle().Foreground(lipgloss.Color("#9be9a8"))
   level2 := lipgloss.NewStyle().Foreground(lipgloss.Color("#40c463"))
@@ -145,8 +146,7 @@ func showGraph(records []Happiness, today string) {
 
   var grassRow string
   for m := 1; m <= 12; m ++ {
-    month := m+1 //0始まりなので
-    daysInMonth := time.Date(year, time.Month(month), 0 ,0, 0, 0, 0, time.Local).Day()
+    daysInMonth := time.Date(year, time.Month(m), 0 ,0, 0, 0, 0, time.Local).Day()
     grassRow = fmt.Sprintf("%02d  ", m)
 
     for day := 1;  day <= daysInMonth; day++ {
