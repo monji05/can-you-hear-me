@@ -121,7 +121,7 @@ func readFile(records *[]Happiness) {
 }
 
 func showGraph(records []Happiness, today string) {
-  grassChar := "■ "
+  grassChar := "󰝤 "
   darkGray := lipgloss.Color("#3C3C3C")
   darkenGray := lipgloss.Darken(darkGray, 0.25)
   level0 := lipgloss.NewStyle().Foreground(darkenGray)
