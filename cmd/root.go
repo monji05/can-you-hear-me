@@ -65,6 +65,9 @@ to quickly create a Cobra application.`,
     today := time.Now().Format(time.DateOnly)
 
     if len(args) == 0 {
+			if len(records) == 0 {
+				return
+			}
 			showGraph(records, today)
       return
     }
@@ -111,13 +114,20 @@ func readFile(records *[]Happiness) {
   if err != nil  && !errors.Is(err, os.ErrNotExist) {
     // ファイルが存在しない場合は初回実行とみなし、空のスライスのまま進める
     log.Fatal(err)
-  } else {
-    err = json.Unmarshal(fileByte, records)
-
-    if err != nil {
-      log.Fatal(err)
-    }
+		return
   }
+
+	// 初回実行かつ、引数なしで実行されたとき
+	if len(fileByte) == 0 {
+		fmt.Println("今日あった嬉しかったこと、良かったこと、頑張ったことを教えてください")
+		return
+	}
+
+	err = json.Unmarshal(fileByte, records)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func showGraph(records []Happiness, today string) {
