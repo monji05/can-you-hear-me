@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"charm.land/lipgloss/v2"
@@ -119,7 +120,7 @@ func readFile(records *[]Happiness) {
 
 	// 初回実行かつ、引数なしで実行されたとき
 	if len(fileByte) == 0 {
-		fmt.Println("今日あった嬉しかったこと、良かったこと、頑張ったことを教えてください")
+		fmt.Println("󰛩 今日あった嬉しかったこと、良かったこと、頑張ったことを教えてください󰛩 ")
 		return
 	}
 
@@ -156,7 +157,7 @@ func showGraph(records []Happiness, today string) {
 			date += "  "
 		}
   }
-  fmt.Println(year)
+  fmt.Printf("Happiness in %s \n", strconv.Itoa(year))
   fmt.Println(date)
 
   var grassRow string
