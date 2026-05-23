@@ -65,6 +65,7 @@ to quickly create a Cobra application.`,
 
     if len(args) == 0 {
 			if records == nil {
+        fmt.Println("󰛩 今日あった嬉しかったこと、良かったこと、頑張ったことを教えてください󰛩 ")
 				return
 			}
 			showGraph(records, today)
@@ -115,13 +116,6 @@ func readFile() ([]Happiness, error){
     log.Fatal(err)
 		return nil, err
   }
-
-	// 初回実行かつ、引数なしで実行されたとき
-	if file == nil {
-		fmt.Println("󰛩 今日あった嬉しかったこと、良かったこと、頑張ったことを教えてください󰛩 ")
-		return nil, nil
-	}
-
 
   r, err := Read(file)
 
