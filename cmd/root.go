@@ -59,14 +59,12 @@ to quickly create a Cobra application.`,
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
   Run: func(cmd *cobra.Command, args []string) {
-
-		var records []Happiness
-    readFile(&records)
+    records, err := readFile()
 
     today := time.Now().Format(time.DateOnly)
 
     if len(args) == 0 {
-			if len(records) == 0 {
+			if records == nil {
 				return
 			}
 			showGraph(records, today)
@@ -109,26 +107,30 @@ to quickly create a Cobra application.`,
 	},
 }
 
-func readFile(records *[]Happiness) {
-  fileByte, err := os.ReadFile("data.json")
+func readFile() ([]Happiness, error){
+  file, err := os.Open("data.json")
 
   if err != nil  && !errors.Is(err, os.ErrNotExist) {
     // ファイルが存在しない場合は初回実行とみなし、空のスライスのまま進める
     log.Fatal(err)
-		return
+		return nil, err
   }
 
 	// 初回実行かつ、引数なしで実行されたとき
-	if len(fileByte) == 0 {
+	if file == nil {
 		fmt.Println("󰛩 今日あった嬉しかったこと、良かったこと、頑張ったことを教えてください󰛩 ")
-		return
+		return nil, nil
 	}
 
-	err = json.Unmarshal(fileByte, records)
+
+  r, err := Read(file)
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+  defer file.Close()
+  return r, nil
 }
 
 func showGraph(records []Happiness, today string) {
