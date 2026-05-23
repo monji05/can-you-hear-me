@@ -61,6 +61,11 @@ to quickly create a Cobra application.`,
   Run: func(cmd *cobra.Command, args []string) {
     records, err := readFile()
 
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+
     today := time.Now().Format(time.DateOnly)
 
     if len(args) == 0 {
@@ -111,8 +116,12 @@ to quickly create a Cobra application.`,
 func readFile() ([]Happiness, error){
   file, err := os.Open("data.json")
 
-  if err != nil  && !errors.Is(err, os.ErrNotExist) {
-    // ファイルが存在しない場合は初回実行とみなし、空のスライスのまま進める
+  if err != nil {
+    // ファイルが存在しない場合は初回実行とみなす
+    if errors.Is(err, os.ErrNotExist) {
+      return nil, nil
+    }
+
     log.Fatal(err)
 		return nil, err
   }
@@ -121,6 +130,7 @@ func readFile() ([]Happiness, error){
 
 	if err != nil {
 		log.Fatal(err)
+    return nil, err
 	}
 
   defer file.Close()

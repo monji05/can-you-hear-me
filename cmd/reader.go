@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"io"
+	"log"
 )
 
 func Read(r io.Reader) ([]Happiness, error) {
@@ -11,6 +12,7 @@ func Read(r io.Reader) ([]Happiness, error) {
   err := json.NewDecoder(r).Decode(&records)
 
   if err != nil {
+    log.Fatal(err)
     return nil, err
   }
 
