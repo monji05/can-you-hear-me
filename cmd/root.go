@@ -40,10 +40,6 @@ type Happiness struct {
   Count int `json:"count"`
 }
 
-type Content struct {
-  Detail string `json:"detail"`
-}
-
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -77,12 +73,7 @@ to quickly create a Cobra application.`,
       return
     }
 
-		newContents := make([]Content, 0, len(args))
-    for _, arg := range args {
-      newContents = append(newContents, Content {
-				Detail: arg,
-			})
-    }
+    newContents := AddContents(args)
 
 		isTodayFlg := false
     for index, record := range records {
