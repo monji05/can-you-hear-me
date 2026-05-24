@@ -1,6 +1,13 @@
 package cmd
 
-func AddRecords(records []Happiness, contents []Content, today string) ([]Happiness) {
+
+type Content struct {
+  Detail string `json:"detail"`
+}
+
+func AddRecords(records []Happiness, args []string, today string) ([]Happiness) {
+  contents := addContents(args)
+
   isTodayFlg := false
   for index, record := range records {
     if today == record.Date {
@@ -22,3 +29,13 @@ func AddRecords(records []Happiness, contents []Content, today string) ([]Happin
   return records
 }
 
+
+func addContents(args []string) ([]Content){
+  newContents := make([]Content, 0, len(args))
+  for _, arg := range args {
+    newContents = append(newContents, Content {
+      Detail: arg,
+    })
+  }
+  return newContents
+}

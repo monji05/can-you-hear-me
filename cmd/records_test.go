@@ -13,11 +13,11 @@ func TestAddRecords_UnmatchedDate(t *testing.T) {
     {Date: "2025-12-31", Contents: existingContents},
   }
 
-  newContents := []Content {
-    {Detail: "new content"},
+  args := []string {
+    "new arg1",
   }
 
-  act := AddRecords(existingRecords, newContents, today)
+  act := AddRecords(existingRecords, args, today)
 
   if len(act) != 2 {
     t.Errorf("recordは2個あるべきだが、%d個", len(act))
@@ -28,8 +28,8 @@ func TestAddRecords_UnmatchedDate(t *testing.T) {
   }
 
   // act[0]が、existingRecordsなので
-  if act[1].Contents[0].Detail != "new content" {
-    t.Errorf("contentはnew contentであるべきだが、%s", act[1].Contents[0])
+  if act[1].Contents[0].Detail != "new arg1" {
+    t.Errorf("contentはnew arg1であるべきだが、%s", act[1].Contents[0])
   }
 
   if len(act[1].Contents) != 1 {
@@ -49,11 +49,11 @@ func TestAddRecords_MatchedDate(t *testing.T) {
     {Date: "2026-01-01", Contents: existingContents},
   }
 
-  newContents := []Content {
-    {Detail: "new content"},
+  args := []string {
+    "new arg2",
   }
 
-  act := AddRecords(existingRecords, newContents, today)
+  act := AddRecords(existingRecords, args, today)
 
   if len(act) != 1 {
     t.Errorf("recordは1個あるべきだが、%d個", len(act))
@@ -63,8 +63,8 @@ func TestAddRecords_MatchedDate(t *testing.T) {
     t.Errorf("Dateは2026-01-01であるべきだが、%s", today)
   }
 
-  if act[0].Contents[2].Detail != "new content" {
-    t.Errorf("contentはnew contentであるべきだが、%s", act[1].Contents[0])
+  if act[0].Contents[2].Detail != "new arg2" {
+    t.Errorf("contentはnew arg2であるべきだが、%s", act[1].Contents[0])
   }
 
   if len(act[0].Contents) != 3 {

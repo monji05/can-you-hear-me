@@ -73,8 +73,7 @@ to quickly create a Cobra application.`,
       return
     }
 
-    newContents := AddContents(args)
-    newRecords := AddRecords(records, newContents, today)
+    newRecords := AddRecords(records, args, today)
 
     buf, err := json.MarshalIndent(newRecords, "", "  ")
 
