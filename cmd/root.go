@@ -74,33 +74,16 @@ to quickly create a Cobra application.`,
     }
 
     newContents := AddContents(args)
+    newRecords := AddRecords(records, newContents, today)
 
-		isTodayFlg := false
-    for index, record := range records {
-      if today == record.Date {
-				isTodayFlg = true
-        records[index].Contents = append(records[index].Contents, newContents...)
-        records[index].Count = len(records[index].Contents)
-				break
-      }
-    }
-
-		if !isTodayFlg {
-			records = append(records, Happiness {
-				Date: today,
-				Contents: newContents,
-        Count: len(newContents),
-			})
-		}
-
-    buf, err := json.MarshalIndent(records, "", "  ")
+    buf, err := json.MarshalIndent(newRecords, "", "  ")
 
     if err != nil {
       log.Fatal(err)
     }
 
     os.WriteFile("data.json", buf, 0640)
-    showGraph(records, today)
+    showGraph(newRecords, today)
 	},
 }
 
