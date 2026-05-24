@@ -51,6 +51,7 @@ func TestAddRecords_MatchedDate(t *testing.T) {
 
   args := []string {
     "new arg2",
+    "new arg3",
   }
 
   act := AddRecords(existingRecords, args, today)
@@ -64,10 +65,14 @@ func TestAddRecords_MatchedDate(t *testing.T) {
   }
 
   if act[0].Contents[2].Detail != "new arg2" {
-    t.Errorf("contentはnew arg2であるべきだが、%s", act[1].Contents[0])
+    t.Errorf("contentはnew arg2であるべきだが、%s", act[1].Contents[0].Detail)
   }
 
-  if len(act[0].Contents) != 3 {
-    t.Errorf("追加した後のcontentは3つであるべきだが、%d件", len(act[0].Contents))
+  if act[0].Contents[3].Detail != "new arg3" {
+    t.Errorf("contentはnew arg3であるべきだが、%s", act[1].Contents[1].Detail)
+  }
+
+  if len(act[0].Contents) != 4 {
+    t.Errorf("追加した後のcontentは4つであるべきだが、%d件", len(act[0].Contents))
   }
 }
