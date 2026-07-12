@@ -35,11 +35,10 @@ import (
 )
 
 type Happiness struct {
-  Date string `json:"date"` // jsonのキーのaliasみたいな
-  Contents []Content `json:"contents"`
-  Count int `json:"count"`
+	Date     string    `json:"date"` // jsonのキーのaliasみたいな
+	Contents []Content `json:"contents"`
+	Count    int       `json:"count"`
 }
-
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -54,116 +53,112 @@ to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
-  Run: func(cmd *cobra.Command, args []string) {
-    records, err := readFile()
-
+	Run: func(cmd *cobra.Command, args []string) {
+		records, err := readFile()
 		if err != nil {
 			log.Fatal(err)
 			return
 		}
 
-    today := time.Now().Format(time.DateOnly)
+		today := time.Now().Format(time.DateOnly)
 
-    if len(args) == 0 {
+		if len(args) == 0 {
 			if records == nil {
-        fmt.Println("󰛩 今日あった嬉しかったこと、良かったこと、頑張ったことを教えてください󰛩 ")
+				fmt.Println("󰛩 今日あった嬉しかったこと、良かったこと、頑張ったことを教えてください󰛩 ")
 				return
 			}
 			showGraph(records, today)
-      return
-    }
+			return
+		}
 
-    newRecords := AddRecords(records, args, today)
+		newRecords := AddRecords(records, args, today)
 
-    buf, err := json.MarshalIndent(newRecords, "", "  ")
+		buf, err := json.MarshalIndent(newRecords, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
 
-    if err != nil {
-      log.Fatal(err)
-    }
-
-    os.WriteFile("data.json", buf, 0640)
-    showGraph(newRecords, today)
+		os.WriteFile("data.json", buf, 0o640)
+		showGraph(newRecords, today)
 	},
 }
 
-func readFile() ([]Happiness, error){
-  file, err := os.Open("data.json")
-
-  if err != nil {
-    // ファイルが存在しない場合は初回実行とみなす
-    if errors.Is(err, os.ErrNotExist) {
-      return nil, nil
-    }
-
-    log.Fatal(err)
-		return nil, err
-  }
-
-  r, err := Read(file)
-
+func readFile() ([]Happiness, error) {
+	file, err := os.Open("data.json")
 	if err != nil {
+		// ファイルが存在しない場合は初回実行とみなす
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, nil
+		}
+
 		log.Fatal(err)
-    return nil, err
+		return nil, err
 	}
 
-  defer file.Close()
-  return r, nil
+	r, err := Read(file)
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+
+	defer file.Close()
+	return r, nil
 }
 
 func showGraph(records []Happiness, today string) {
-  grassChar := " "
-  darkGray := lipgloss.Color("#3C3C3C")
-  darkenGray := lipgloss.Darken(darkGray, 0.25)
-  level0 := lipgloss.NewStyle().Foreground(darkenGray)
-  level1 := lipgloss.NewStyle().Foreground(lipgloss.Color("#9be9a8"))
-  level2 := lipgloss.NewStyle().Foreground(lipgloss.Color("#4d8b60"))
-  level3 := lipgloss.NewStyle().Foreground(lipgloss.Color("#216e39"))
-  level4 := lipgloss.NewStyle().Foreground(lipgloss.Color("#1a582d"))
+	grassChar := " "
+	darkGray := lipgloss.Color("#3C3C3C")
+	darkenGray := lipgloss.Darken(darkGray, 0.25)
+	level0 := lipgloss.NewStyle().Foreground(darkenGray)
+	level1 := lipgloss.NewStyle().Foreground(lipgloss.Color("#9be9a8"))
+	level2 := lipgloss.NewStyle().Foreground(lipgloss.Color("#4d8b60"))
+	level3 := lipgloss.NewStyle().Foreground(lipgloss.Color("#216e39"))
+	level4 := lipgloss.NewStyle().Foreground(lipgloss.Color("#1a582d"))
 
-  now := time.Now()
-  year := now.Year()
+	now := time.Now()
+	year := now.Year()
 
-  happinessMap := make(map[string]int)
-  for _, record := range records {
-    happinessMap[record.Date] = record.Count
-  }
+	happinessMap := make(map[string]int)
+	for _, record := range records {
+		happinessMap[record.Date] = record.Count
+	}
 
-  var date string = "    "
-  for day := 1; day <= 31; day++ {
-		if day % 5 == 0 {
+	var date string = "    "
+	for day := 1; day <= 31; day++ {
+		if day%5 == 0 {
 			date += fmt.Sprintf("%02d", day)
 		} else {
 			date += "  "
 		}
-  }
-  fmt.Printf("Happiness in %s \n", strconv.Itoa(year))
-  fmt.Println(date)
+	}
+	fmt.Printf("Happiness in %s \n", strconv.Itoa(year))
+	fmt.Println(date)
 
-  var grassRow string
-  for m := 1; m <= 12; m ++ {
-    daysInMonth := time.Date(year, time.Month(m), 0 ,0, 0, 0, 0, time.Local).Day()
-    grassRow = fmt.Sprintf("%02d  ", m)
+	var grassRow string
+	for m := 1; m <= 12; m++ {
+		daysInMonth := time.Date(year, time.Month(m), 0, 0, 0, 0, 0, time.Local).Day()
+		grassRow = fmt.Sprintf("%02d  ", m)
 
-    for day := 1;  day <= daysInMonth; day++ {
-      key := fmt.Sprintf("%04d-%02d-%02d", year, time.Month(m), day)
-      count := happinessMap[key]
-      var rendered string
-      switch {
-      case count == 0:
-        rendered = level0.Render(grassChar)
-      case count == 1:
-        rendered = level1.Render(grassChar)
-      case count == 2:
-        rendered = level2.Render(grassChar)
-      case count == 3:
-        rendered = level3.Render(grassChar)
-      default:
-        rendered = level4.Render(grassChar)
-      }
-      grassRow += rendered
-    }
-    fmt.Println(grassRow)
-  }
+		for day := 1; day <= daysInMonth; day++ {
+			key := fmt.Sprintf("%04d-%02d-%02d", year, time.Month(m), day)
+			count := happinessMap[key]
+			var rendered string
+			switch {
+			case count == 0:
+				rendered = level0.Render(grassChar)
+			case count == 1:
+				rendered = level1.Render(grassChar)
+			case count == 2:
+				rendered = level2.Render(grassChar)
+			case count == 3:
+				rendered = level3.Render(grassChar)
+			default:
+				rendered = level4.Render(grassChar)
+			}
+			grassRow += rendered
+		}
+		fmt.Println(grassRow)
+	}
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -186,5 +181,3 @@ func init() {
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
-

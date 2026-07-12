@@ -7,14 +7,13 @@ import (
 )
 
 func Read(r io.Reader) ([]Happiness, error) {
-  var records []Happiness
+	var records []Happiness
 
-  err := json.NewDecoder(r).Decode(&records)
+	err := json.NewDecoder(r).Decode(&records)
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
 
-  if err != nil {
-    log.Fatal(err)
-    return nil, err
-  }
-
-  return records, nil
+	return records, nil
 }

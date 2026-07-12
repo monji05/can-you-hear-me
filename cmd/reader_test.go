@@ -6,7 +6,7 @@ import (
 )
 
 func TestRead(t *testing.T) {
-  // テスト用のダミーJSONをただの文字列として用意する
+	// テスト用のダミーJSONをただの文字列として用意する
 	expected := `[
 		{
 			"Date": "2026-05-01",
@@ -15,10 +15,10 @@ func TestRead(t *testing.T) {
 		}
 	]`
 
-  r := strings.NewReader(expected)
+	r := strings.NewReader(expected)
 
-  records, err := Read(r)
-  if err != nil {
+	records, err := Read(r)
+	if err != nil {
 		t.Errorf("予期せぬエラーが発生しました: %v", err)
 	}
 
@@ -30,4 +30,3 @@ func TestRead(t *testing.T) {
 		t.Errorf("日付が正しく読み込めていません: %s", records[0].Date)
 	}
 }
-
