@@ -136,7 +136,7 @@ func showGraph(records []Happiness, today string) {
 
 	var grassRow string
 	for m := 1; m <= 12; m++ {
-		daysInMonth := time.Date(year, time.Month(m), 0, 0, 0, 0, 0, time.Local).Day()
+		daysInMonth := time.Date(year, time.Month(m+1), 0, 0, 0, 0, 0, time.Local).Day()
 		grassRow = fmt.Sprintf("%02d  ", m)
 
 		for day := 1; day <= daysInMonth; day++ {
