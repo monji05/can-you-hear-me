@@ -143,14 +143,14 @@ func showGraph(records []Happiness, today string) {
 			key := fmt.Sprintf("%04d-%02d-%02d", year, time.Month(m), day)
 			count := happinessMap[key]
 			var rendered string
-			switch {
-			case count == 0:
+			switch count {
+			case 0:
 				rendered = level0.Render(grassChar)
-			case count == 1:
+			case 1:
 				rendered = level1.Render(grassChar)
-			case count == 2:
+			case 2:
 				rendered = level2.Render(grassChar)
-			case count == 3:
+			case 3:
 				rendered = level3.Render(grassChar)
 			default:
 				rendered = level4.Render(grassChar)
